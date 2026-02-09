@@ -86,6 +86,58 @@ public sealed class CompaniesApiIntegrationTests
         Assert.NotEmpty(payload.Errors);
     }
 
+    [Fact]
+    public async Task Post_NameNotRelevantToWebsite_Returns400WithBusinessValidationShape()
+    {
+        await using var factory = CreateFactory();
+        using var client = CreateClient(factory);
+
+        var response = await client.PostAsJsonAsync("/api/companies", new
+        {
+            companyName = "Blue Ocean",
+            websiteUrl = "https://example.com",
+        });
+
+        Assert.Equal(HttpStatusCode.BadRequest, response.StatusCode);
+
+        var payload = await response.Content.ReadFromJsonAsync<ValidationErrorResponse>();
+        Assert.NotNull(payload);
+        Assert.Equal("Validation failed.", payload!.Message);
+        Assert.True(payload.Errors.ContainsKey("company"));
+        Assert.Contains(
+            payload.Errors["company"],
+            error => error.Contains("not relevant", StringComparison.OrdinalIgnoreCase));
+    }
+
+    [Fact]
+    public async Task Get_WithQ_ReturnsResultsOrderedByRelevanceWithMetadata()
+    {
+        await using var factory = CreateFactory();
+        using var client = CreateClient(factory);
+
+        await CreateCompanyAsync(client, "Ace Payments", "https://www.acepayments.com");
+        await CreateCompanyAsync(client, "Ace Logistics", "https://www.acelogistics.com");
+        await CreateCompanyAsync(client, "Global Shipping", "https://www.globalshipping.com");
+
+        var results = await client.GetFromJsonAsync<List<CompanySearchResultDto>>(
+            "/api/companies?q=ace%20payments");
+
+        Assert.NotNull(results);
+        Assert.NotEmpty(results!);
+
+        // Global Shipping should not appear because its relevance score for the query is zero.
+        Assert.DoesNotContain(results!, result => result.Company.CompanyName == "Global Shipping");
+
+        // Highest relevance hit should be first.
+        Assert.Equal("Ace Payments", results![0].Company.CompanyName);
+        Assert.NotEmpty(results[0].ScoreReasons);
+
+        for (var i = 1; i < results.Count; i++)
+        {
+            Assert.True(results[i - 1].RelevanceScore >= results[i].RelevanceScore);
+        }
+    }
+
     private static WebApplicationFactory<Program> CreateFactory()
     {
         return new WebApplicationFactory<Program>();
