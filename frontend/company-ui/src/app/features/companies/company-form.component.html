@@ -1,0 +1,45 @@
+<section class="panel form-panel">
+  <h2>Add Company</h2>
+
+  <form class="stack-form" [formGroup]="form" (ngSubmit)="submit()">
+    <div class="field">
+      <label for="companyName">Company Name</label>
+      <input id="companyName" type="text" formControlName="companyName" />
+      @if (form.controls.companyName.touched && form.controls.companyName.errors?.['required']) {
+        <small class="validation-error">Company name is required.</small>
+      }
+      @if (form.controls.companyName.touched && form.controls.companyName.errors?.['minlength']) {
+        <small class="validation-error">Company name must have at least 3 characters.</small>
+      }
+      @for (error of getFieldErrors('companyName'); track error) {
+        <small class="validation-error">{{ error }}</small>
+      }
+    </div>
+
+    <div class="field">
+      <label for="websiteUrl">Website URL</label>
+      <input id="websiteUrl" type="url" formControlName="websiteUrl" />
+      @if (form.controls.websiteUrl.touched && form.controls.websiteUrl.errors?.['required']) {
+        <small class="validation-error">Website URL is required.</small>
+      }
+      @if (form.controls.websiteUrl.touched && form.controls.websiteUrl.errors?.['websiteUrl']) {
+        <small class="validation-error">Website URL must be a valid absolute HTTP/HTTPS URL.</small>
+      }
+      @for (error of getFieldErrors('websiteUrl'); track error) {
+        <small class="validation-error">{{ error }}</small>
+      }
+    </div>
+
+    <button class="btn-primary" type="submit" [disabled]="submitting()">
+      @if (submitting()) { Saving... } @else { Save Company }
+    </button>
+  </form>
+
+  @if (successMessage()) {
+    <p class="status success">{{ successMessage() }}</p>
+  }
+
+  @if (generalErrorMessage()) {
+    <p class="status error">{{ generalErrorMessage() }}</p>
+  }
+</section>

@@ -1,0 +1,198 @@
+:root {
+  --bg-top: #f4f8ff;
+  --bg-bottom: #eef7f3;
+  --panel-bg: #ffffff;
+  --panel-border: #d7e3ea;
+  --text-main: #10222f;
+  --text-muted: #4c6572;
+  --accent: #0e7490;
+  --accent-strong: #155e75;
+  --danger: #b42318;
+  --success: #087443;
+  --shadow-soft: 0 10px 28px rgba(16, 34, 47, 0.08);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  min-height: 100%;
+}
+
+body {
+  font-family: "Avenir Next", "Segoe UI", "Helvetica Neue", sans-serif;
+  color: var(--text-main);
+  background: linear-gradient(165deg, var(--bg-top), var(--bg-bottom));
+}
+
+h1,
+h2 {
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+h2 {
+  font-size: 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.page {
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 2rem 1rem 3rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.page-title {
+  font-size: clamp(1.5rem, 2.8vw, 2rem);
+}
+
+.panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: 14px;
+  padding: 1rem;
+  box-shadow: var(--shadow-soft);
+}
+
+.stack-form {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+}
+
+label {
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--text-main);
+}
+
+input {
+  width: 100%;
+  border: 1px solid #b7c7d0;
+  border-radius: 10px;
+  padding: 0.6rem 0.75rem;
+  font-size: 0.95rem;
+  color: var(--text-main);
+  background: #ffffff;
+}
+
+input:focus {
+  outline: 2px solid color-mix(in srgb, var(--accent) 35%, white);
+  border-color: var(--accent);
+}
+
+.action-row {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
+button {
+  border: 0;
+  border-radius: 10px;
+  padding: 0.58rem 0.95rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.btn-primary {
+  color: #ffffff;
+  background: var(--accent);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: var(--accent-strong);
+}
+
+.btn-secondary {
+  color: var(--text-main);
+  background: #dde8ee;
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background: #cfdee6;
+}
+
+.validation-error {
+  color: var(--danger);
+  font-size: 0.82rem;
+}
+
+.status {
+  margin: 0;
+  padding: 0.65rem 0.8rem;
+  border-radius: 10px;
+  font-size: 0.9rem;
+}
+
+.status.loading,
+.status.empty {
+  background: #e8f1f6;
+  color: var(--text-muted);
+}
+
+.status.success {
+  background: #ddf6e8;
+  color: var(--success);
+}
+
+.status.error {
+  background: #fbe4e2;
+  color: var(--danger);
+}
+
+.company-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.company-card {
+  border: 1px solid #d9e5eb;
+  border-radius: 12px;
+  padding: 0.75rem 0.8rem;
+  background: #fbfdff;
+}
+
+.company-name {
+  display: block;
+  margin-bottom: 0.3rem;
+}
+
+.company-url {
+  color: #0b5b78;
+  font-size: 0.9rem;
+  word-break: break-word;
+}
+
+.company-meta {
+  color: var(--text-muted);
+  font-size: 0.82rem;
+  margin-top: 0.2rem;
+}
+
+@media (max-width: 720px) {
+  .page {
+    padding-top: 1.25rem;
+  }
+
+  .panel {
+    padding: 0.85rem;
+  }
+}

@@ -1,0 +1,46 @@
+<main class="page">
+  <h1 class="page-title">Company Directory</h1>
+
+  <app-company-form (created)="refreshCompanies()"></app-company-form>
+
+  <section class="panel search-panel">
+    <h2>Search</h2>
+    <form class="stack-form" [formGroup]="searchForm" (ngSubmit)="search()">
+      <div class="field">
+        <label for="nameFilter">Name</label>
+        <input id="nameFilter" type="text" formControlName="name" />
+      </div>
+
+      <div class="field">
+        <label for="domainFilter">Domain</label>
+        <input id="domainFilter" type="text" formControlName="domain" />
+      </div>
+
+      <div class="field">
+        <label for="qFilter">Relevance Query (q)</label>
+        <input id="qFilter" type="text" formControlName="q" />
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" type="submit" [disabled]="loading()">Search</button>
+        <button class="btn-secondary" type="button" (click)="clearSearch()" [disabled]="loading()">Clear</button>
+      </div>
+    </form>
+  </section>
+
+  @if (loading()) {
+    <p class="status loading">Loading companies...</p>
+  }
+
+  @if (loadError()) {
+    <p class="status error">{{ loadError() }}</p>
+  }
+
+  @if (!loading() && !loadError() && companies().length === 0) {
+    <p class="status empty">No results.</p>
+  }
+
+  @if (companies().length > 0) {
+    <app-company-list [companies]="companies()"></app-company-list>
+  }
+</main>
